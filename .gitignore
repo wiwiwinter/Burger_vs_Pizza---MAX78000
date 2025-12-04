@@ -1,0 +1,40 @@
+# Build artifacts
+*.o
+*.elf
+*.axf
+*.bin
+*.hex
+*.map
+*.lst
+*.d
+
+# IDE files
+.vscode/
+*.code-workspace
+
+# Build directories
+build/
+Build/
+Debug/
+Release/
+
+# Compiled libraries
+*.a
+*.lib
+
+# Dependencies
+deps/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# Log files
+*.log
+log.txt
+
+# OS specific
+.DS_Store
+Thumbs.db
