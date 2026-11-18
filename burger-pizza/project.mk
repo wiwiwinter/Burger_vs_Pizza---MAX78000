@@ -1,10 +1,8 @@
-# This file can be used to set build configuration
-# variables.  These variables are defined in a file called 
-# "Makefile" that is located next to this one.
+# Project build overrides for Makefile.
+# Reference: https://github.com/Analog-Devices-MSDK/VSCode-Maxim/tree/develop#build-configuration
 
-# For instructions on how to use this system, see
-# https://github.com/Analog-Devices-MSDK/VSCode-Maxim/tree/develop#build-configuration
+# Uncomment to target MAX78000 Feather instead of the default EvKit_V1:
+# BOARD = FTHR_RevA
 
-# **********************************************************
-
-# Add your config here!
+# Uncomment if MAXIM_PATH is not set in your environment:
+# MAXIM_PATH = C:/MaximSDK

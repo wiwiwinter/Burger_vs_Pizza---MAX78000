@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 300" width="100%" height="100%" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif">
+  <rect width="960" height="300" rx="10" fill="#0f172a"/>
+
+  <text x="32" y="38" fill="#f8fafc" font-size="18" font-weight="700">MAX78000 Hardware Inference &amp; Verification Dataflow</text>
+  <text x="32" y="58" fill="#94a3b8" font-size="12">System Clock: 100 MHz IPO (Cortex-M4)  •  CNN Clock: 50 MHz APB (PCLK / 1)  •  Sleep-Driven ISR Sync</text>
+
+  <defs>
+    <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8"/>
+    </marker>
+  </defs>
+
+  <!-- Step 1: Init & Weights -->
+  <g transform="translate(28, 86)">
+    <rect width="200" height="172" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+    <text x="18" y="28" fill="#38bdf8" font-size="12" font-weight="700">1. CLOCK &amp; WEIGHT LOAD</text>
+    <text x="18" y="52" fill="#e2e8f0" font-size="12" font-family="monospace">cnn_enable()</text>
+    <text x="18" y="72" fill="#94a3b8" font-size="11">• Enable ICC0 cache &amp; 100MHz IPO</text>
+    <text x="18" y="92" fill="#94a3b8" font-size="11">• Load 57,776 B quantized kernels</text>
+    <text x="18" y="112" fill="#94a3b8" font-size="11">• Load 2 B bias parameters</text>
+    <text x="18" y="132" fill="#94a3b8" font-size="11">• Configure 7-layer state machine</text>
+    <text x="18" y="154" fill="#64748b" font-size="10" font-family="monospace">src/cnn.c • include/weights.h</text>
+  </g>
+
+  <line x1="228" y1="172" x2="252" y2="172" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <!-- Step 2: FIFO Streaming -->
+  <g transform="translate(256, 86)">
+    <rect width="205" height="172" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+    <text x="18" y="28" fill="#38bdf8" font-size="12" font-weight="700">2. HWC FIFO STREAMING</text>
+    <text x="18" y="52" fill="#e2e8f0" font-size="12" font-family="monospace">cnn_start() + load_input()</text>
+    <text x="18" y="72" fill="#94a3b8" font-size="11">• Poll status at 0x50000004</text>
+    <text x="18" y="92" fill="#94a3b8" font-size="11">• Write 16,384 words to 0x50000008</text>
+    <text x="18" y="112" fill="#94a3b8" font-size="11">• Enter Cortex-M4 sleep mode</text>
+    <text x="18" y="132" fill="#94a3b8" font-size="11">• Wake on CNN_ISR completion</text>
+    <text x="18" y="154" fill="#64748b" font-size="10" font-family="monospace">src/main.c • sampledata.h</text>
+  </g>
+
+  <line x1="461" y1="172" x2="485" y2="172" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <!-- Step 3: KAT Verification -->
+  <g transform="translate(489, 86)">
+    <rect width="205" height="172" rx="8" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+    <text x="18" y="28" fill="#38bdf8" font-size="12" font-weight="700">3. KNOWN-ANSWER TEST</text>
+    <text x="18" y="52" fill="#e2e8f0" font-size="12" font-family="monospace">check_output()</text>
+    <text x="18" y="72" fill="#94a3b8" font-size="11">• Read Layer 6 @ 0x50401000</text>
+    <text x="18" y="92" fill="#94a3b8" font-size="11">• Word 0: 0x00016686 (+91,782)</text>
+    <text x="18" y="112" fill="#94a3b8" font-size="11">• Word 1: 0xfffe5bd6 (-107,562)</text>
+    <text x="18" y="132" fill="#94a3b8" font-size="11">• Assert exact bit match</text>
+    <text x="18" y="154" fill="#64748b" font-size="10" font-family="monospace">src/main.c • sampleoutput.h</text>
+  </g>
+
+  <line x1="694" y1="172" x2="718" y2="172" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrow2)"/>
+
+  <!-- Step 4: Q15 Softmax Output -->
+  <g transform="translate(722, 86)">
+    <rect width="210" height="172" rx="8" fill="#1e293b" stroke="#22c55e" stroke-width="1.5"/>
+    <text x="18" y="28" fill="#22c55e" font-size="12" font-weight="700">4. FIXED-POINT SOFTMAX</text>
+    <text x="18" y="52" fill="#e2e8f0" font-size="12" font-family="monospace">softmax_q17p14_q15()</text>
+    <text x="18" y="72" fill="#94a3b8" font-size="11">• Unload Q17.14 logits</text>
+    <text x="18" y="92" fill="#94a3b8" font-size="11">• Base-2 exponential shift</text>
+    <text x="18" y="112" fill="#4ade80" font-size="11" font-weight="600">• Class 0 (Burger): 100.0%</text>
+    <text x="18" y="132" fill="#94a3b8" font-size="11">• Class 1 (Pizza): 0.0%</text>
+    <text x="18" y="154" fill="#64748b" font-size="10" font-family="monospace">src/softmax.c • UART 115200</text>
+  </g>
+</svg>

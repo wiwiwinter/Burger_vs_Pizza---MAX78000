@@ -8,9 +8,13 @@
 *.lst
 *.d
 
-# IDE files
+# IDE and project metadata files
 .vscode/
 *.code-workspace
+.project
+.cproject
+.settings/
+*.launch
 
 # Build directories
 build/
